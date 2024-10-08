@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRT Translator</title>
+    <script>
+        // Function to display translated subtitles in the preview section
+        function displayTranslatedSubtitles(translatedText) {
+            const previewDiv = document.getElementById('subtitle-preview');
+            const loadingMessage = document.getElementById('loading-message');
+            loadingMessage.style.display = 'none';  // Hide the loading message
+            previewDiv.innerText = translatedText;  // Display the translated subtitles
+        }
+
+        // Function to show the loading message when the form is submitted
+        function showLoadingMessage() {
+            const loadingMessage = document.getElementById('loading-message');
+            loadingMessage.style.display = 'block';  // Show the loading message
+        }
+    </script>
+</head>
+<body>
+    <h1>Translate SRT Subtitles</h1>
+    <form id="translate-form" action="/translate_srt_preview" method="POST" enctype="multipart/form-data" target="iframe-result" onsubmit="showLoadingMessage()">
+        <label for="srt_file">Upload SRT file:</label>
+        <input type="file" name="srt_file" id="srt_file" required><br><br>
+
+        <label for="target_language">Select Target Language:</label>
+        <select name="target_language" id="target_language" required>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="zh">Chinese</option>
+        </select><br><br>
+
+        <button type="submit">Translate</button>
+    </form>
+
+    <!-- Loading message -->
+    <p id="loading-message" style="display: none;">Translation in progress... Please wait.</p>
+
+    <h2>Translated Subtitle Preview:</h2>
+    <div id="subtitle-preview" style="white-space: pre-wrap; border: 1px solid black; padding: 10px; width: 80%; height: 300px; overflow-y: scroll;">
+        <!-- Translated subtitles will be displayed here -->
+    </div>
+
+    <!-- Invisible iframe to handle form submission -->
+    <iframe id="iframe-result" name="iframe-result" style="display:none;" onload="
+        if(this.contentDocument) {
+            const result = this.contentDocument.body.innerText;
+            displayTranslatedSubtitles(result);  // Call function to display subtitles
+        }
+    "></iframe>
+</body>
+</html>
